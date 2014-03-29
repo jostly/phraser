@@ -222,3 +222,7 @@ woodchuck
 yak
 zebra
 zebu
+
+uakari
+uroch
+unicorn

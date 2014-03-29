@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class WordsHealthCheck extends HealthCheck {
 
-    private final static Set<String> alphabet = Sets.newHashSet("abcdefghijklmnopqrstuvwxyz".split(""));
+    private final static Set<String> alphabet = Sets.newHashSet("abcdefghijklmnopqrstuvwyz".split("")); // x intentionally left out
 
     private final WordType wordType;
     private final List<String> words;
@@ -22,12 +22,24 @@ public class WordsHealthCheck extends HealthCheck {
 
     @Override
     protected Result check() throws Exception {
-        if (words.stream()
+        Set<String> letters = words.stream()
                 .map(word -> word.substring(0, 1))
-                .collect(Collectors.toSet()).containsAll(alphabet)) {
+                .collect(Collectors.toSet());
+
+        boolean entireAlphabetInLetters = letters.containsAll(alphabet);
+        boolean entireLettersInAlphabet = alphabet.containsAll(letters);
+        if (entireAlphabetInLetters && entireLettersInAlphabet) {
             return Result.healthy();
+        } else if (!entireAlphabetInLetters) {
+            return Result.unhealthy("The " + wordType + " word list must cover the entire alphabet." +
+                    "Missing: " + alphabet.stream().filter(a -> !letters.contains(a))
+                    .sorted()
+                    .collect(Collectors.toList()).toString());
         } else {
-            return Result.unhealthy("The " + wordType + " word list must cover the entire alphabet");
+            return Result.unhealthy("The " + wordType + " word list contains words starting with an illegal letter: " +
+                    letters.stream().filter(a -> !alphabet.contains(a))
+                            .sorted()
+                            .collect(Collectors.toList()).toString());
         }
     }
 }

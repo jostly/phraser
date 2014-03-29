@@ -426,7 +426,6 @@ frail
 frank
 frayed
 free
-French
 fresh
 frequent
 friendly
@@ -1090,7 +1089,6 @@ sorrowful
 soulful
 soupy
 sour
-Spanish
 sparkling
 sparse
 specific
@@ -1187,7 +1185,6 @@ thirsty
 this
 thorough
 thorny
-those
 thoughtful
 threadbare
 thrifty

@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Path("/")
 @Produces(MediaType.TEXT_PLAIN)
 public class PhraserResource {
-
     private final List<String> adjectives;
     private final List<String> animals;
 
