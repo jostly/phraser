@@ -1,1 +1,1 @@
-web     java $JAVA_OPTS -Ddw.server.connector.port=3001 -jar target/phraser.jar server phraser.yml
+web     java $JAVA_OPTS -Ddw.server.connector.port=$PORT -jar target/phraser.jar server phraser.yml
