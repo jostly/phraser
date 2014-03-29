@@ -1,2 +1,10 @@
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /youllneverguessthisadminpath
+  connector:
+    type: http
+    port: 8080
+
 adjectivesFile: /adjectives.txt
 animalsFile: /animals.txt

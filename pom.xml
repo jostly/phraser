@@ -55,7 +55,7 @@
                             </excludes>
                         </filter>
                     </filters>
-                    <finalName>${artifactId}</finalName>
+                    <finalName>${project.artifactId}</finalName>
                 </configuration>
                 <executions>
                     <execution>
