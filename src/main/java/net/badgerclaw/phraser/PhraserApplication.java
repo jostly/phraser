@@ -3,6 +3,7 @@ package net.badgerclaw.phraser;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 import net.badgerclaw.phraser.domain.WordType;
 import net.badgerclaw.phraser.health.WordsHealthCheck;
 import net.badgerclaw.phraser.resources.PhraserResource;
@@ -15,7 +16,11 @@ import java.util.stream.Collectors;
 public class PhraserApplication extends Application<PhraserConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new PhraserApplication().run(args);
+        if (args.length == 0) {
+            new PhraserApplication().run(new String[] {"server", "phraser.yml"});
+        } else {
+            new PhraserApplication().run(args);
+        }
     }
 
     @Override
@@ -24,8 +29,8 @@ public class PhraserApplication extends Application<PhraserConfiguration> {
     }
 
     @Override
-    public void initialize(Bootstrap<PhraserConfiguration> phraserConfigurationBootstrap) {
-
+    public void initialize(Bootstrap<PhraserConfiguration> bootstrap) {
+        bootstrap.addBundle(new ViewBundle());
     }
 
     @Override

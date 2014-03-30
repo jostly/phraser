@@ -1,6 +1,9 @@
 package net.badgerclaw.phraser.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import net.badgerclaw.phraser.domain.Phrase;
+import net.badgerclaw.phraser.domain.PhraseBuilder;
+import net.badgerclaw.phraser.views.PhraseView;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,12 +11,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 @Path("/")
 @Produces(MediaType.TEXT_PLAIN)
-public class PhraserResource {
+public class PhraserResource implements PhraseBuilder {
     private final List<String> adjectives;
     private final List<String> animals;
 
@@ -25,37 +26,66 @@ public class PhraserResource {
     @GET
     @Path("/random")
     @Timed
-    public String randomPhrase() {
-        Random random = new Random();
-        return oneOf(adjectives, random) + " " + oneOf(animals, random);
+    public String randomPhraseAsText() {
+        return randomPhrase(adjectives, animals).toString();
     }
 
     @GET
-    @Path("/{letter: [a-z]}")
+    @Path("/{letter: [a-wy-z]}")
     @Timed
-    public String constrainedPhrase(@PathParam("letter") String firstLetter) {
-        Random random = new Random();
-        return oneOfStartingWith(adjectives, firstLetter, random) + " " +
-                oneOfStartingWith(animals, firstLetter, random);
+    public String constrainedPhraseAsText(@PathParam("letter") String firstLetter) {
+        return constrainedPhrase(adjectives, animals, firstLetter).toString();
     }
 
     @GET
     @Timed
-    public String alliterativePhrase() {
-        Random random = new Random();
-        String adjective = oneOf(adjectives, random);
-        String firstLetter = adjective.substring(0, 1);
-        return adjective + " " + oneOfStartingWith(animals, firstLetter, random);
+    public String alliterativePhraseAsText() {
+        return alliterativePhrase(adjectives, animals).toString();
     }
 
-    private String oneOf(List<String> words, Random random) {
-        return words.get(random.nextInt(words.size()));
+    @GET
+    @Path("/random")
+    @Timed
+    @Produces(MediaType.APPLICATION_JSON)
+    public Phrase randomPhraseAsJson() {
+        return randomPhrase(adjectives, animals);
     }
 
-    private String oneOfStartingWith(List<String> words, String firstLetter, Random random) {
-        return oneOf(words.stream()
-                .filter(word -> word.startsWith(firstLetter))
-                .collect(Collectors.toList()),
-                random);
+    @GET
+    @Path("/{letter: [a-wy-z]}")
+    @Timed
+    @Produces(MediaType.APPLICATION_JSON)
+    public Phrase constrainedPhraseAsJson(@PathParam("letter") String firstLetter) {
+        return constrainedPhrase(adjectives, animals, firstLetter);
+    }
+
+    @GET
+    @Timed
+    @Produces(MediaType.APPLICATION_JSON)
+    public Phrase alliterativePhraseAsJson() {
+        return alliterativePhrase(adjectives, animals);
+    }
+
+    @GET
+    @Timed
+    @Produces(MediaType.TEXT_HTML)
+    public PhraseView alliterativePhraseAsHtml() {
+        return new PhraseView(alliterativePhrase(adjectives, animals));
+    }
+
+    @GET
+    @Path("/random")
+    @Timed
+    @Produces(MediaType.TEXT_HTML)
+    public PhraseView randomPhraseAsHtml() {
+        return new PhraseView(randomPhrase(adjectives, animals));
+    }
+
+    @GET
+    @Path("/{letter: [a-wy-z]}")
+    @Timed
+    @Produces(MediaType.TEXT_HTML)
+    public PhraseView constrainedPhraseAsHtml(@PathParam("letter") String firstLetter) {
+        return new PhraseView(constrainedPhrase(adjectives, animals, firstLetter));
     }
 }
