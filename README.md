@@ -16,7 +16,7 @@ Output from the service will depend on the Accept header. The following media ty
 
         {
             "adjective": "<some adjective>",
-            "animal": "<some animal>
+            "animal": "<some animal>"
         }
 
 `text/html`: A page designed for viewing in browsers
